@@ -32,6 +32,9 @@
 5. Go to **Project Settings** → **Database** → **Connection string** (URI)
 6. Copy `.env.example` to `.env.local` and paste the connection string
 
+### Option C: Use my existing Supabase project
+1. Copy `DATABASE_URL="postgresql://postgres.fpambvsmxtxblgcxdtow:uf9XfXnGZQMutare@aws-1-us-east-1.pooler.supabase.com:5432/postgres"` to `.env.local`
+
 ## How to Run
 ```bash
 npm install
