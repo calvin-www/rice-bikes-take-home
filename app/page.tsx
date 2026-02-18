@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import TransactionsTable from '@/components/TransactionsTable';
 import { Transaction } from '@/types';
+import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
 
 export default function Home() {
@@ -30,17 +31,31 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
-      <h1 className="mb-8 text-center text-3xl font-bold tracking-tight">
-        Rice Bikes Repair Dashboard
-      </h1>
-
-      {loading && (
-        <div className="flex justify-center py-12 text-muted-foreground">
-          Loading transactions...
+    <div className="min-h-screen bg-muted/40">
+      <header className="border-b bg-background">
+        <div className="mx-auto flex max-w-5xl items-center gap-3 px-6 py-4">
+          <div className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground text-sm font-bold">
+            RB
+          </div>
+          <h1 className="text-lg font-semibold tracking-tight">
+            Rice Bikes Repair Dashboard
+          </h1>
         </div>
-      )}
-      {!loading && <TransactionsTable transactions={transactions} />}
-    </main>
+      </header>
+
+      <main className="mx-auto max-w-5xl px-6 py-8">
+        {loading && (
+          <Card>
+            <CardContent className="py-12">
+              <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                <div className="size-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                Loading transactions...
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        {!loading && <TransactionsTable transactions={transactions} />}
+      </main>
+    </div>
   );
 }

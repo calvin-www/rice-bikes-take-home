@@ -15,7 +15,7 @@
 
 ## Database Setup Instructions
 
-### Option A: Local PostgreSQL (recommended)
+### Option A: Local PostgreSQL
 1. `createdb rice_bikes`
 2. `psql -d rice_bikes -f schema.sql`
 3. `psql -d rice_bikes -f seed.sql`
@@ -24,7 +24,7 @@
    DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/rice_bikes"
    ```
 
-### Option B: Supabase (hosted)
+### Option B: Supabase
 1. Create a new project at [supabase.com](https://supabase.com)
 2. Go to **SQL Editor**
 3. Copy and run contents of `schema.sql`
@@ -73,13 +73,19 @@ curl http://localhost:3000/api/transactions
 ```
 
 ## Design Decisions
-- Used `pg` with raw SQL (no ORM) to demonstrate SQL competency and proper JOINs
-- JOIN path: `repair_transactions` → `customers` (via `customer_id`), `repair_transactions` → `bikes` (via `bike_id`)
-- API returns transactions sorted by `transaction_date` DESC (most recent first)
-- Frontend displays oldest first by default with client-side sorting on all columns
-- Client-side pagination with page size 5 for optimal demo with 10 seed records
-- API returns nested `customer` and `bike` objects for clean frontend consumption
-- SSL is applied conditionally — remote databases only (localhost connections skip SSL)
+
+**Backend:**
+- Chose `pg` with raw SQL over an ORM — keeps the dependency surface small and makes the JOIN logic explicit
+- Separated the codebase into route handlers (`app/api/`), a service layer (`lib/services/`), and a database module (`lib/db.ts`) for clear separation of concerns
+- API returns nested `customer` and `bike` objects so the frontend doesn't need to do any data joining
+
+**Frontend:**
+- The API sorts by `transaction_date` DESC (most recent first) per the spec; the frontend defaults to ascending (oldest first) per the spec, with client-side sorting on all columns
+- Pagination set to 5 rows per page — sized for the 10-record seed dataset
+
+**Infrastructure:**
+- Next.js App Router lets the API and frontend live in one project with zero config for running locally
+- SSL is applied conditionally so both local Postgres and hosted providers (Supabase, etc.) work without changes
 
 ## Assumptions
 - The assignment spec lists a "Service" column in the frontend table, but the provided database schema has no service/description field. I omitted this column rather than fabricate data not present in the schema.

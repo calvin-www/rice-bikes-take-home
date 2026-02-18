@@ -111,7 +111,7 @@ export default function TransactionsTable({ transactions }: TransactionsTablePro
       <CardContent className="px-0 pt-0">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent">
+            <TableRow className="bg-muted/50 hover:bg-muted/50">
               <TableHead className="cursor-pointer select-none" onClick={() => handleSort('transaction_date')}>
                 <span className="inline-flex items-center">Date<SortIcon column="transaction_date" /></span>
               </TableHead>
@@ -130,22 +130,22 @@ export default function TransactionsTable({ transactions }: TransactionsTablePro
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentTransactions.map((transaction) => (
-              <TableRow key={transaction.transaction_id}>
-                <TableCell>{formatDate(transaction.transaction_date)}</TableCell>
+            {currentTransactions.map((transaction, i) => (
+              <TableRow key={transaction.transaction_id} className={i % 2 === 0 ? 'bg-muted/30' : ''}>
+                <TableCell className="text-muted-foreground">{formatDate(transaction.transaction_date)}</TableCell>
                 <TableCell className="font-medium">
                   {transaction.customer.first_name} {transaction.customer.last_name}
                 </TableCell>
-                <TableCell>{transaction.customer.email}</TableCell>
+                <TableCell className="text-muted-foreground">{transaction.customer.email}</TableCell>
                 <TableCell>{transaction.bike.make} {transaction.bike.model}</TableCell>
-                <TableCell className="text-right font-medium">{formatCurrency(transaction.total_cost)}</TableCell>
+                <TableCell className="text-right tabular-nums font-medium">{formatCurrency(transaction.total_cost)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 px-6 py-4">
+          <div className="flex items-center justify-center gap-2 border-t px-6 py-4">
             <Button
               variant="outline"
               size="sm"
